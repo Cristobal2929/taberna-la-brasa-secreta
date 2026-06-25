@@ -1,0 +1,372 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Taberna La Brasa Secreta</title>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    /* --------------------------------------------------------------
+       Reset & Base
+       -------------------------------------------------------------- */
+    *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+    html { scroll-behavior:smooth; }
+    body {
+      font-family:'Inter',sans-serif;
+      background:#121212;
+      color:#f5f5f5;
+      line-height:1.6;
+      overflow-x:hidden;
+    }
+    a { color:inherit; text-decoration:none; }
+    img,svg { max-width:100%; height:auto; display:block; }
+
+    /* --------------------------------------------------------------
+       Paleta de colores
+       -------------------------------------------------------------- */
+    :root {
+      --color-primary:#FF9500;   /* Naranja fuego */
+      --color-accent:#D4AF37;    /* Dorado */
+      --color-bg-dark:#121212;
+      --color-bg-light:#1e1e1e;
+    }
+
+    /* --------------------------------------------------------------
+       Tipografía
+       -------------------------------------------------------------- */
+    h1,h2,h3,h4 { font-family:'Playfair Display',serif; }
+    h1 { font-size:2.8rem; font-weight:900; }
+    h2 { font-size:2rem; margin-bottom:.5rem; }
+    .subtitle { font-size:1.2rem; opacity:.85; }
+
+    /* --------------------------------------------------------------
+       Navbar
+       -------------------------------------------------------------- */
+    .navbar {
+      position:fixed;
+      top:0; left:0; right:0;
+      height:60px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:0 1rem;
+      background:rgba(18,18,18,.8);
+      backdrop-filter:blur(8px);
+      z-index:1000;
+    }
+    .navbar .logo { font-size:1.3rem; font-weight:700; color:var(--color-primary); }
+    .navbar .menu { display:flex; gap:1rem; }
+    .navbar .menu a { font-weight:500; transition:color .3s; }
+    .navbar .menu a:hover { color:var(--color-primary); }
+    .navbar .hamburger { display:none; cursor:pointer; }
+    .navbar .hamburger div { width:24px; height:3px; background:#fff; margin:4px 0; transition:transform .3s; }
+
+    /* --------------------------------------------------------------
+       Hero
+       -------------------------------------------------------------- */
+    .hero {
+      min-height:80vh;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      align-items:center;
+      text-align:center;
+      padding:2rem 1rem;
+      background:linear-gradient(135deg, #0d0d0d, #1a1a1a);
+      position:relative;
+      overflow:hidden;
+    }
+    .hero::before {
+      content:"";
+      position:absolute;
+      inset:0;
+      background:linear-gradient(135deg, rgba(255,149,0,.4), rgba(212,175,55,.3));
+      opacity:.2;
+    }
+    .hero h1 {
+      color:#fff;
+      text-shadow:2px 2px 4px rgba(0,0,0,.6);
+      margin-bottom:.5rem;
+    }
+    .hero .subtitle {
+      color:#ddd;
+      margin-bottom:1.5rem;
+    }
+    .hero .cta {
+      background:var(--color-primary);
+      color:#121212;
+      padding:.8rem 1.6rem;
+      border-radius:9999px;
+      font-weight:600;
+      transition:transform .2s,box-shadow .2s;
+    }
+    .hero .cta:hover {
+      transform:scale(1.05);
+      box-shadow:0 0 15px var(--color-primary);
+    }
+
+    /* --------------------------------------------------------------
+       Tabs (Carta)
+       -------------------------------------------------------------- */
+    .tabs {
+      display:flex;
+      justify-content:center;
+      gap:1rem;
+      margin:2rem 0;
+      flex-wrap:wrap;
+    }
+    .tab {
+      padding:.5rem 1rem;
+      border-radius:9999px;
+      background:var(--color-bg-light);
+      cursor:pointer;
+      transition:background .3s,color .3s;
+    }
+    .tab.active {
+      background:var(--color-primary);
+      color:#121212;
+    }
+    .menu-section { max-width:800px; margin:0 auto; padding:1rem; }
+    .dish-card {
+      background:var(--color-bg-light);
+      border-radius:12px;
+      padding:1rem;
+      margin:1rem 0;
+      display:flex;
+      flex-direction:column;
+      gap:.5rem;
+      transition:transform .3s,box-shadow .3s;
+    }
+    .dish-card:hover {
+      transform:translateY(-4px);
+      box-shadow:0 8px 20px rgba(0,0,0,.4);
+    }
+    .dish-title {
+      font-size:1.4rem;
+      font-weight:700;
+      color:var(--color-primary);
+    }
+    .dish-price {
+      font-weight:600;
+      margin-top:.3rem;
+      color:#fff;
+    }
+
+    /* --------------------------------------------------------------
+       Footer
+       -------------------------------------------------------------- */
+    .footer {
+      background:#0d0d0d;
+      color:#bbb;
+      padding:2rem 1rem;
+      text-align:center;
+      font-size:.9rem;
+    }
+    .footer .logo { font-size:1.4rem; color:var(--color-primary); margin-bottom:.5rem; }
+    .footer a { color:#ddd; }
+    .footer a:hover { color:var(--color-primary); }
+
+    /* --------------------------------------------------------------
+       Floating WhatsApp Button
+       -------------------------------------------------------------- */
+    .whatsapp-float {
+      position:fixed;
+      bottom:20px;
+      right:20px;
+      background:#25D366;
+      width:56px;
+      height:56px;
+      border-radius:50%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      box-shadow:0 2px 10px rgba(0,0,0,.3);
+      z-index:1000;
+      cursor:pointer;
+      transition:transform .2s;
+    }
+    .whatsapp-float:hover { transform:scale(1.1); }
+
+    /* --------------------------------------------------------------
+       Animaciones & Scroll
+       -------------------------------------------------------------- */
+    .fade-in {
+      opacity:0;
+      transform:translateY(20px);
+      transition:opacity .6s ease-out,transform .6s ease-out;
+    }
+    .fade-in.visible { opacity:1; transform:none; }
+
+    /* --------------------------------------------------------------
+       Responsive
+       -------------------------------------------------------------- */
+    @media (max-width:768px) {
+      .navbar .menu { display:none; }
+      .navbar .hamburger { display:block; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="logo">La Brasa Secreta</div>
+    <div class="menu">
+      <a href="#hero">Inicio</a>
+      <a href="#carta">Carta</a>
+      <a href="#contacto">Contacto</a>
+    </div>
+    <div class="hamburger" id="hamburger">
+      <div></div><div></div><div></div>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero" id="hero">
+    <h1>Taberna La Brasa Secreta</h1>
+    <p class="subtitle">El auténtico sabor de la brasa y el mar de Cádiz en tu mesa</p>
+    <a href="#carta" class="cta">Ver Carta</a>
+  </section>
+
+  <!-- Carta (Tabs) -->
+  <section class="menu-section" id="carta">
+    <div class="tabs" role="tablist">
+      <div class="tab active" data-target="entrantes">Entrantes</div>
+      <div class="tab" data-target="especialidades">Especialidades</div>
+      <div class="tab" data-target="carnes">Carnes</div>
+      <div class="tab" data-target="postres">Postres</div>
+    </div>
+
+    <!-- Entrantes -->
+    <div class="tab-content fade-in visible" id="entrantes">
+      <div class="dish-card">
+        <div class="dish-title">Croquetas caseras de rabo de toro</div>
+        <div class="dish-description">Con mayonesa de rábano picante, crujientes por fuera y jugosas por dentro.</div>
+        <div class="dish-price">12,50€</div>
+      </div>
+    </div>
+
+    <!-- Especialidades -->
+    <div class="tab-content fade-in" id="especialidades" hidden>
+      <div class="dish-card">
+        <div class="dish-title">Atún rojo de Almadraba a la brasa</div>
+        <div class="dish-description">Sellado a la brasa con emulsión de soja y sésamo, puro sabor del Atlántico.</div>
+        <div class="dish-price">24,00€</div>
+      </div>
+    </div>
+
+    <!-- Carnes -->
+    <div class="tab-content fade-in" id="carnes" hidden>
+      <div class="dish-card">
+        <div class="dish-title">Secreto ibérico al carbón</div>
+        <div class="dish-description">Con reducción de vino Pedro Ximénez, jugoso y aromático.</div>
+        <div class="dish-price">18,50€</div>
+      </div>
+    </div>
+
+    <!-- Postres -->
+    <div class="tab-content fade-in" id="postres" hidden>
+      <div class="dish-card">
+        <div class="dish-title">Tarta de queso fluida</div>
+        <div class="dish-description">Con queso Payoyo de la sierra, ligera y cremosa.</div>
+        <div class="dish-price">6,50€</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer" id="contacto">
+    <div class="logo">La Brasa Secreta</div>
+    <p>Dirección: Calle del Mar, 12, 11300 La Línea de la Concepción, Cádiz</p>
+    <p>Teléfono/WhatsApp: <a href="https://wa.me/34956998877">+34 956 99 88 77</a></p>
+    <p>Política de alérgenos: Informamos de la presencia de frutos secos, gluten y lácteos en algunos platos. Consulte al personal.</p>
+    <p>&copy; 2024 Taberna La Brasa Secreta. Todos los derechos reservados.</p>
+  </footer>
+
+  <!-- Floating WhatsApp Button -->
+  <a href="https://wa.me/34956998877?text=Hola,%20me%20gustaría%20reservar%20una%20mesa%20en%20La%20Brasa%20Secreta" class="whatsapp-float" aria-label="Reserva por WhatsApp">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" width="28" height="28" fill="#fff">
+      <path d="M380.9 97.1C339-15.5 225.5-33.5 151.5 15.2 77.5 63.9 55.9 176.5 97.8 289.1c-5.5 14.2-10.5 28.5-15.2 42.9-2.5 8.2 1.1 17.1 9.3 19.6l71.5 22.5c8.2 2.5 17.1-1.1 19.6-9.3 4.7-14.4 9.7-28.7 15.2-42.9 41.9-112.6 20.3-225.2-53.7-273.9-73.9-48.7-187.4-30.7-229.3 81.9-41.9 112.6-20.3 225.2 53.7 273.9 73.9 48.7 187.4 30.7 229.3-81.9 41.9-112.6 20.3-225.2-53.7-273.9zM224 384c-88.2 0-160-71.8-160-160S135.8 64 224 64s160 71.8 160 160-71.8 160-160 160z"/>
+    </svg>
+  </a>
+
+  <!-- Scripts -->
+  <script>
+    // --------------------------------------------------------------
+    // Navbar Hamburger Toggle
+    // --------------------------------------------------------------
+    const hamburger = document.getElementById('hamburger');
+    const menu = document.querySelector('.navbar .menu');
+    hamburger.addEventListener('click', () => {
+      menu.classList.toggle('open');
+      if (menu.classList.contains('open')) {
+        menu.style.display = 'flex';
+        menu.style.flexDirection = 'column';
+        menu.style.background = 'rgba(18,18,18,.9)';
+        menu.style.position = 'absolute';
+        menu.style.top = '60px';
+        menu.style.right = '0';
+        menu.style.width = '200px';
+        menu.style.padding = '1rem';
+      } else {
+        menu.style.display = '';
+        menu.style.background = '';
+        menu.style.position = '';
+        menu.style.top = '';
+        menu.style.right = '';
+        menu.style.width = '';
+        menu.style.padding = '';
+      }
+    });
+
+    // --------------------------------------------------------------
+    // Tabs Interaction
+    // --------------------------------------------------------------
+    const tabs = document.querySelectorAll('.tab');
+    const contents = document.querySelectorAll('.tab-content');
+
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        // Activate tab
+        tabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+
+        // Show corresponding content
+        const target = tab.dataset.target;
+        contents.forEach(c => {
+          if (c.id === target) {
+            c.hidden = false;
+            c.classList.add('visible');
+          } else {
+            c.hidden = true;
+            c.classList.remove('visible');
+          }
+        });
+      });
+    });
+
+    // --------------------------------------------------------------
+    // Fade-in on scroll (IntersectionObserver)
+    // --------------------------------------------------------------
+    const observerOptions = {
+      threshold: 0.1
+    };
+    const fadeEls = document.querySelectorAll('.fade-in');
+    const observer = new IntersectionObserver((entries, obs) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          obs.unobserve(entry.target);
+        }
+      });
+    }, observerOptions);
+    fadeEls.forEach(el => observer.observe(el));
+
+    // --------------------------------------------------------------
+    // Simple Counter Animation (Years of Experience)
+    // --------------------------------------------------------------
+    // (Optional: you can add a stats section later)
+  </script>
+</body>
+</html>
